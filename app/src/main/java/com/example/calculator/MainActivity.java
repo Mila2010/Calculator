@@ -28,11 +28,11 @@ package com.example.calculator;
         private EditText mText;
         private TextView mResult;
 
-        private int mTempResult;
+        private Double mTempResult;
         private String mOperator="";
         private String mOperands="";
-        private int mFirstOperand;
-        private int mSecondOperand;
+        private Double mFirstOperand;
+        private Double mSecondOperand;
 
 
         //private List<String> mTempResult=new ArrayList<>();
@@ -83,13 +83,13 @@ package com.example.calculator;
 
                 }
             });
-            mButton45.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mOperator = mButton45.getText().toString();
-                    mResult.setText(mOperands);
-
-                }
-            });
+//            mButton3.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    mOperator = mButton3.getText().toString();
+//                    mResult.setText(mOperands);
+//
+//                }
+//            });
             mButton3.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     mOperands = mOperands + mButton3.getText();
@@ -97,13 +97,13 @@ package com.example.calculator;
 
                 }
             });
-//        mButton4.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                    mOperands = mOperands + mButton4.getText();
-//                mResult.setText(mOperands);
-//
-//            }
-//        });
+        mButton4.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                    mOperands = mOperands + mButton4.getText();
+                mResult.setText(mOperands);
+
+            }
+        });
             mButton21.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     mOperands = mOperands + mButton21.getText();
@@ -155,30 +155,30 @@ package com.example.calculator;
             });
             mButton34.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mSecondOperand=strToInt(mOperands);
+                    mSecondOperand=strToDouble(mOperands);
 
                     mResult.setText(mButton34.getText());
                     switch(mOperator){
 
                         case "+":
                             mTempResult=mFirstOperand+mSecondOperand;
-                            mResult.setText(Integer.toString(mTempResult));
-                            mOperands=Integer.toString(mTempResult);
+                            mResult.setText(Double.toString(mTempResult));
+                            mOperands=Double.toString(mTempResult);
                             break;
                         case "-":
                             mTempResult=mFirstOperand-mSecondOperand;
-                            mResult.setText(Integer.toString(mTempResult));
-                            mOperands=Integer.toString(mTempResult);
+                            mResult.setText(Double.toString(mTempResult));
+                            mOperands=Double.toString(mTempResult);
                             break;
                         case "*":
                             mTempResult=mFirstOperand*mSecondOperand;
-                            mResult.setText(Integer.toString(mTempResult));
-                            mOperands=Integer.toString(mTempResult);
+                            mResult.setText(Double.toString(mTempResult));
+                            mOperands=Double.toString(mTempResult);
                             break;
                         case "%":
                             mTempResult=mFirstOperand/mSecondOperand;
-                            mResult.setText(Integer.toString(mTempResult));
-                            mOperands=Integer.toString(mTempResult);
+                            mResult.setText(Double.toString(mTempResult));
+                            mOperands=Double.toString(mTempResult);
                             break;
 
                     }
@@ -187,7 +187,12 @@ package com.example.calculator;
             });
             mButton41.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperands = mOperands.substring(0, mOperands.length()-1);
+
+                    if(mOperands.length()>0){
+                    mOperands = mOperands.substring(0, mOperands.length()-1);}else{
+                        mOperands="";
+                    }
+
                     mResult.setText(mOperands);
 
                 }
@@ -195,7 +200,7 @@ package com.example.calculator;
 
             mButton42.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mFirstOperand = strToInt(mOperands);
+                    mFirstOperand = strToDouble(mOperands);
                     mOperands="";
                     mOperator=mButton42.getText().toString();
                     mResult.setText(mOperator);
@@ -206,7 +211,7 @@ package com.example.calculator;
 
             mButton43.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mFirstOperand = strToInt(mOperands);
+                    mFirstOperand = strToDouble(mOperands);
                     mOperands="";
                     mOperator=mButton43.getText().toString();
                     mResult.setText(mOperator);
@@ -215,16 +220,23 @@ package com.example.calculator;
             });
             mButton44.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mFirstOperand = strToInt(mOperands);
+                    if(mOperator.equals(null)&&!mOperands.equals(null)){
+                    mFirstOperand = strToDouble(mOperands);
                     mOperands="";
                     mOperator=mButton44.getText().toString();
-                    mResult.setText(mOperator);
+                    mResult.setText(mOperator);}
+                else{
+
+                        mOperands = mOperands + mButton44.getText();
+                        mResult.setText(mOperands);
+
+                    }
 
                 }
             });
             mButton45.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mFirstOperand = strToInt(mOperands);
+                    mFirstOperand = strToDouble(mOperands);
                     mOperands="";
                     mOperator=mButton45.getText().toString();
                     mResult.setText(mOperator);
@@ -248,6 +260,50 @@ package com.example.calculator;
                 num *= 10;
                 num += str.charAt(i++) - '0';
             }
+
+            if (isNeg)
+                num = -num;
+            return num;
+        }
+
+        public static double strToDouble( String str ){
+            int i = 0;
+            double num = 0;
+            double reminder=0;
+            boolean isNeg = false;
+
+
+            if (str.charAt(0) == '-') {
+                isNeg = true;
+                i = 1;
+            }
+
+
+            do{
+                if(str.charAt(i)!='.'){
+                    num *= 10;
+
+                    num += str.charAt(i) - '0';
+                    System.out.println(num);
+                }
+
+
+                else{
+                    for(int j=str.length()-1;j>i;j--){
+
+                        reminder+=str.charAt(j)-'0';
+                        reminder/=10;
+                        System.out.println(reminder);
+
+                    }
+
+                    break;
+
+                }
+                i++;
+            }while( i < str.length());
+
+            num+=reminder;
 
             if (isNeg)
                 num = -num;
