@@ -5,22 +5,23 @@ package com.example.calculator;
  */
 
 public class TreeNode {
-    private double data;
-    private TreeNode left;
-    private TreeNode right;
+    public String data;
+    TreeNode left;
+    TreeNode right;
+
 
 
     //Creates leaf node
-    TreeNode(double data) {
+    public TreeNode(String data) {
         this.data = data;
         right = null;
         left = null;
     }
 
-    public double getData(){
+    public String getData(){
         return data;
     }
-    public void setData(int data){
+    public void setData(String data){
         this.data = data;
     }
     public TreeNode getLeft(){
@@ -37,6 +38,11 @@ public class TreeNode {
     public void setRight(TreeNode right){
         this.right = right;
     }
+
+    public String toString(){
+        return "value = " +  this.data;
+    }
+
 
 
 }
