@@ -8,35 +8,32 @@ package com.example.calculator;
     import android.widget.TextView;
 
     public class MainActivity extends AppCompatActivity {
-        private Button mButton1;
-        private Button mButton2;
-        private Button mButton3;
-        private Button mButton4;
-        private Button mButton21;
-        private Button mButton22;
-        private Button mButton23;
-        private Button mButton24;
-        private Button mButton31;
-        private Button mButton32;
-        private Button mButton33;
-        private Button mButton34;
-        private Button mButton45;
-        private Button mButton41;
-        private Button mButton42;
-        private Button mButton43;
-        private Button mButton44;
+        private Button mButtonOne;
+        private Button mButtonTwo;
+        private Button mButtonThree;
+        private Button mButtonFour;
+        private Button mButtonFive;
+        private Button mButtonSix;
+        private Button mButtonSeven;
+        private Button mButtonEight;
+        private Button mButtonNine;
+        private Button mButtonZero;
+        private Button mButtonAdd;
+        private Button mButtonSubtract;
+        private Button mButtonDivide;
+        private Button mButtonMultiply;
+        private Button mButtonDelete;
+        private Button mButtonResult;
         private EditText mText;
         private TextView mResult;
-
         private int mTempResult;
-        private String mOperator="";
-        private String mOperands="";
+        private String mOperator = "";
+        private String mOperands = "";
         private int mFirstOperand;
         private int mSecondOperand;
 
 
         //private List<String> mTempResult=new ArrayList<>();
-
 
         // private List<Button> calcButtons= ArrayList(
 //        mOne,
@@ -47,117 +44,141 @@ package com.example.calculator;
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-            mButton1 = (Button) findViewById(R.id.button1);
-            mButton2 = (Button) findViewById(R.id.button2);
-            mButton3 = (Button) findViewById(R.id.button3);
-            mButton4 = (Button) findViewById(R.id.button4);
-            mButton21 = (Button) findViewById(R.id.button21);
-            mButton22 = (Button) findViewById(R.id.button22);
-            mButton23 = (Button) findViewById(R.id.button23);
-            mButton24 = (Button) findViewById(R.id.button24);
-            mButton31 = (Button) findViewById(R.id.button31);
-            mButton32 = (Button) findViewById(R.id.button32);
-            mButton33 = (Button) findViewById(R.id.button33);
-            mButton34 = (Button) findViewById(R.id.button34);
-            mButton41 = (Button) findViewById(R.id.button41);
-            mButton42 = (Button) findViewById(R.id.button42);
-            mButton43 = (Button) findViewById(R.id.button43);
-            mButton44 = (Button) findViewById(R.id.button44);
-            mButton45 = (Button) findViewById(R.id.button45);
-//        mText = (EditText) findViewById(R.id.inputText);
+            mButtonOne  = (Button) findViewById(R.id.button_one);
+            mButtonTwo = (Button) findViewById(R.id.button_two);
+            mButtonThree = (Button) findViewById(R.id.button_three);
+            mButtonFour = (Button) findViewById(R.id.button_four);
+            mButtonFive = (Button) findViewById(R.id.button_five);
+            mButtonSix = (Button) findViewById(R.id.button_six);
+            mButtonSeven = (Button) findViewById(R.id.button_seven);
+            mButtonEight = (Button) findViewById(R.id.button_eight);
+            mButtonNine = (Button) findViewById(R.id.button_nine);
+            mButtonZero = (Button) findViewById(R.id.button_zero);
+            mButtonAdd = (Button) findViewById(R.id.button_add);
+            mButtonSubtract = (Button) findViewById(R.id.button_subtract);
+            mButtonDivide = (Button) findViewById(R.id.button_divide);
+            mButtonMultiply = (Button) findViewById(R.id.button_multiply);
+            mButtonDelete = (Button) findViewById(R.id.button_delete);
+            mButtonResult = (Button) findViewById(R.id.button_result);
             mResult=(TextView) findViewById(R.id.outputText);
 
-//        if(mTempResult==null && mTempResult==null) {
-            mButton1.setOnClickListener(new View.OnClickListener() {
+
+            mButtonOne.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperands = mOperands + mButton1.getText();
+                    mOperands = mOperands + mButtonOne.getText();
+                    mResult.setText(mOperands);
+                }
+            });
+
+            mButtonTwo.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    mOperands = mOperands + mButtonTwo.getText();
+                    mResult.setText(mOperands);
+
+                }
+            });
+            mButtonThree.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    mOperator = mButtonThree.getText().toString();
+                    mResult.setText(mOperands);
+
+                }
+            });
+            mButtonFour.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    mOperands = mOperands + mButtonFour.getText();
                     mResult.setText(mOperands);
 
                 }
             });
 
-            mButton2.setOnClickListener(new View.OnClickListener() {
+            mButtonFive .setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperands = mOperands + mButton2.getText();
+                    mOperands = mOperands + mButtonFive.getText();
                     mResult.setText(mOperands);
 
                 }
             });
-            mButton45.setOnClickListener(new View.OnClickListener() {
+            mButtonSix.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperator = mButton45.getText().toString();
+                    mOperands = mOperands + mButtonSix.getText();
                     mResult.setText(mOperands);
 
                 }
             });
-            mButton3.setOnClickListener(new View.OnClickListener() {
+            mButtonSeven.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperands = mOperands + mButton3.getText();
+                    mOperands = mOperands + mButtonSeven.getText();
                     mResult.setText(mOperands);
 
                 }
             });
-//        mButton4.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                    mOperands = mOperands + mButton4.getText();
-//                mResult.setText(mOperands);
-//
-//            }
-//        });
-            mButton21.setOnClickListener(new View.OnClickListener() {
+            mButtonEight.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperands = mOperands + mButton21.getText();
+                    mOperands = mOperands + mButtonEight.getText();
                     mResult.setText(mOperands);
 
                 }
             });
-            mButton22.setOnClickListener(new View.OnClickListener() {
+            mButtonNine.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperands = mOperands + mButton22.getText();
+                    mOperands = mOperands + mButtonNine.getText();
                     mResult.setText(mOperands);
 
                 }
             });
-            mButton23.setOnClickListener(new View.OnClickListener() {
+            mButtonZero.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperands = mOperands + mButton23.getText();
+                    mOperands = mOperands + mButtonZero.getText();
                     mResult.setText(mOperands);
 
                 }
             });
-            mButton24.setOnClickListener(new View.OnClickListener() {
+
+            mButtonAdd.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    mOperands = mOperands + mButton24.getText();
+                    mOperands = mOperands + mButtonAdd.getText();
+                    mResult.setText(mOperands);
+                }
+            });
+
+            mButtonSubtract.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    mOperands = mOperands + mButtonSubtract.getText();
+                    mResult.setText(mOperands);
+                }
+            });
+            mButtonDivide.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if(mOperands.length() > 0) {
+                        mOperands = mOperands.substring(0, mOperands.length() - 1);
+                    }
+                    mResult.setText(mOperands);
+                }
+            });
+
+            mButtonMultiply.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    mFirstOperand = strToInt(mOperands);
+                    mOperands="";
+                    mOperator= mButtonMultiply.getText().toString();
+                    mResult.setText(mOperator);
+                }
+            });
+
+            mButtonDelete   .setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    mOperands = mOperands + mButtonDelete.getText();
                     mResult.setText(mOperands);
 
                 }
             });
-            mButton31.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mOperands = mOperands + mButton31.getText();
-                    mResult.setText(mOperands);
 
-                }
-            });
-            mButton32.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mOperands = mOperands + mButton32.getText();
-                    mResult.setText(mOperands);
-
-                }
-            });
-            mButton33.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mOperands = mOperands + mButton33.getText();
-                    mResult.setText(mOperands);
-
-                }
-            });
-            mButton34.setOnClickListener(new View.OnClickListener() {
+            mButtonResult.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     mSecondOperand=strToInt(mOperands);
 
-                    mResult.setText(mButton34.getText());
+                    mResult.setText(mButtonResult.getText());
                     switch(mOperator){
 
                         case "+":
@@ -175,62 +196,16 @@ package com.example.calculator;
                             mResult.setText(Integer.toString(mTempResult));
                             mOperands=Integer.toString(mTempResult);
                             break;
-                        case "%":
+                        case "÷":
                             mTempResult=mFirstOperand/mSecondOperand;
                             mResult.setText(Integer.toString(mTempResult));
                             mOperands=Integer.toString(mTempResult);
                             break;
-
                     }
 
                 }
             });
-            mButton41.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mOperands = mOperands.substring(0, mOperands.length()-1);
-                    mResult.setText(mOperands);
 
-                }
-            });
-
-            mButton42.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mFirstOperand = strToInt(mOperands);
-                    mOperands="";
-                    mOperator=mButton42.getText().toString();
-                    mResult.setText(mOperator);
-
-
-                }
-            });
-
-            mButton43.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mFirstOperand = strToInt(mOperands);
-                    mOperands="";
-                    mOperator=mButton43.getText().toString();
-                    mResult.setText(mOperator);
-
-                }
-            });
-            mButton44.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mFirstOperand = strToInt(mOperands);
-                    mOperands="";
-                    mOperator=mButton44.getText().toString();
-                    mResult.setText(mOperator);
-
-                }
-            });
-            mButton45.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mFirstOperand = strToInt(mOperands);
-                    mOperands="";
-                    mOperator=mButton45.getText().toString();
-                    mResult.setText(mOperator);
-
-                }
-            });
         }
         public static int strToInt( String str ){
             int i = 0;
