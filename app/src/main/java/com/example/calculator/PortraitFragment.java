@@ -2,13 +2,14 @@ package com.example.calculator;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import static com.example.calculator.TypeConvertor.strToDouble;
 
 /**
  * Created by Millochka on 10/5/16.
@@ -76,15 +77,12 @@ public class PortraitFragment extends Fragment {
         mButton45 = (Button) view.findViewById(R.id.button45);
 //        mText = (EditText) findViewById(R.id.inputText);
         mResult=(TextView) view.findViewById(R.id.outputText);
-        mVisualizationView = (TextView) view.findViewById(R.id.outputText1);
+        //mVisualizationView = (TextView) view.findViewById(R.id.outputText1);
 
-//        if(mTempResult==null && mTempResult==null) {
+
         mButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands  +=mButton1.getText();
-                mVisualization += mButton1.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton1);
 
 
             }
@@ -92,107 +90,68 @@ public class PortraitFragment extends Fragment {
 
         mButton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton2.getText();
-                mVisualization += mButton2.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton2);
 
             }
         });
-//            mButton3.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    mOperator = mButton3.getText().toString();
-//                    mResult.setText(mOperands);
-//
-//                }
-//            });
+
         mButton3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton3.getText();
-                mVisualization += mButton3.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton3);
 
             }
         });
         mButton4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton4.getText();
-                mVisualization += mButton4.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton4);
 
             }
         });
         mButton21.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton21.getText();
-                mVisualization += mButton21.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton21);
 
             }
         });
         mButton22.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton22.getText();
-                mVisualization += mButton22.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton22);
 
             }
         });
         mButton23.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton23.getText();
-                mVisualization += mButton23.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton23);
 
             }
         });
         mButton24.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton24.getText();
-                mVisualization += mButton24.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton24);
 
             }
         });
         mButton31.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton31.getText();
-                mVisualization += mButton31.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton31);
 
             }
         });
         mButton32.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton32.getText();
-                mVisualization += mButton32.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton32);
 
             }
         });
         mButton33.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mOperands = mOperands + mButton33.getText();
-                mVisualization += mButton33.getText();
-                mVisualizationView.setText(mVisualization);
-                mResult.setText(mOperands);
+                processOnClick(mButton33);
 
             }
         });
         mButton34.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mSecondOperand=strToDouble(mOperands);
-                mVisualization += mButton34.getText();
-                mVisualizationView.setText(mVisualization);
-
 
                 mResult.setText(mButton34.getText());
                 switch(mOperator){
@@ -201,32 +160,28 @@ public class PortraitFragment extends Fragment {
                         mTempResult=mFirstOperand+mSecondOperand;
                         mResult.setText(Double.toString(mTempResult));
                         mOperands=Double.toString(mTempResult);
-                        mVisualization = "";
-                        mVisualizationView.setText(mVisualization);
+
                         mOperands=Double.toString(mTempResult);
                         break;
                     case "-":
                         mTempResult=mFirstOperand-mSecondOperand;
                         mResult.setText(Double.toString(mTempResult));
                         mOperands=Double.toString(mTempResult);
-                        mVisualization = "";
-                        mVisualizationView.setText(mVisualization);
+
                         mOperands=Double.toString(mTempResult);
                         break;
                     case "*":
                         mTempResult=mFirstOperand*mSecondOperand;
                         mResult.setText(Double.toString(mTempResult));
                         mOperands=Double.toString(mTempResult);
-                        mVisualization = "";
-                        mVisualizationView.setText(mVisualization);
+
                         mOperands=Double.toString(mTempResult);
                         break;
                     case "%":
                         mTempResult=mFirstOperand/mSecondOperand;
                         mResult.setText(Double.toString(mTempResult));
                         mOperands=Double.toString(mTempResult);
-                        mVisualization = "";
-                        mVisualizationView.setText(mVisualization);
+
                         mOperands=Double.toString(mTempResult);
                         break;
 
@@ -239,15 +194,14 @@ public class PortraitFragment extends Fragment {
 
                 if(mOperands.length()>0){
                     mOperands = mOperands.substring(0, mOperands.length()-1);
-                    mVisualization= mVisualization.substring(0,mOperands.length()-1);
-                    mVisualizationView.setText(mVisualization);}
+                    }
                 else{
                     mOperands="";
 
                 }
 
                 mResult.setText(mOperands);
-                mVisualizationView.setText(mVisualization);
+
 
             }
         });
@@ -257,8 +211,7 @@ public class PortraitFragment extends Fragment {
                 mFirstOperand = strToDouble(mOperands);
                 mOperands="";
                 mOperator=mButton42.getText().toString();
-                mVisualization += mButton42.getText();
-                mVisualizationView.setText(mVisualization);
+
                 mResult.setText(mOperator);
 
 
@@ -270,24 +223,18 @@ public class PortraitFragment extends Fragment {
                 mFirstOperand = strToDouble(mOperands);
                 mOperands="";
                 mOperator=mButton43.getText().toString();
-                mVisualization += mButton43.getText();
-                mVisualizationView.setText(mVisualization);
+
                 mResult.setText(mOperator);
 
             }
         });
         mButton44.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d(CLASS, mOperands);
-                Log.d(CLASS, mOperator);
                 if(mOperator.equals(null)&&mOperands.equals(null)){
 
                     mOperands = mOperands + mButton44.getText();
                     mResult.setText(mOperands);
-                    mVisualization += mButton44.getText();
-                    mVisualizationView.setText(mVisualization);
-                    Log.d(CLASS, "operands"+mOperands);
-                    Log.d(CLASS, "operator"+mOperator);
+
 
                     }
                 else{
@@ -296,8 +243,7 @@ public class PortraitFragment extends Fragment {
                     mOperands="";
                     mOperator=mButton44.getText().toString();
                     mResult.setText(mOperator);
-                    mVisualization += mButton44.getText();
-                    mVisualizationView.setText(mVisualization);
+
 
                 }
 
@@ -308,78 +254,24 @@ public class PortraitFragment extends Fragment {
                 mFirstOperand = strToDouble(mOperands);
                 mOperands="";
                 mOperator=mButton45.getText().toString();
-                mVisualization += mButton45.getText();
-                mVisualizationView.setText(mVisualization);
+
                 mResult.setText(mOperator);
 
             }
         });
     }
-    public static int strToInt( String str ){
-        int i = 0;
-        int num = 0;
-        boolean isNeg = false;
 
+    public void displayOperations(Button button){
+        mVisualization += button.getText();
+        mVisualizationView.setText(mVisualization);
 
-        if (str.charAt(0) == '-') {
-            isNeg = true;
-            i = 1;
-        }
+    }
+    public void processOnClick(Button button){
+        mOperands  +=button.getText();
+        mResult.setText(mOperands);
 
-
-        while( i < str.length()) {
-            num *= 10;
-            num += str.charAt(i++) - '0';
-        }
-
-        if (isNeg)
-            num = -num;
-        return num;
     }
 
-    public static double strToDouble( String str ){
-        int i = 0;
-        double num = 0;
-        double reminder=0;
-        boolean isNeg = false;
-
-
-        if (str.charAt(0) == '-') {
-            isNeg = true;
-            i = 1;
-        }
-
-
-        do{
-            if(str.charAt(i)!='.'){
-                num *= 10;
-
-                num += str.charAt(i) - '0';
-                System.out.println(num);
-            }
-
-
-            else{
-                for(int j=str.length()-1;j>i;j--){
-
-                    reminder+=str.charAt(j)-'0';
-                    reminder/=10;
-                    System.out.println(reminder);
-
-                }
-
-                break;
-
-            }
-            i++;
-        }while( i < str.length());
-
-        num+=reminder;
-
-        if (isNeg)
-            num = -num;
-        return num;
-    }
 
 
 }
