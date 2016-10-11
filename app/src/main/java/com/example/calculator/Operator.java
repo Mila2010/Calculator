@@ -9,9 +9,11 @@ public enum Operator {
     DIVISION,
     MULTIPLICATION,
     ADDITION,
-    SUBTRACTION;
+    SUBTRACTION,
+    OPEN_PARENTHESES,
+    CLOSED_PARENTHESES;
 
-    public int evaluate(int a, int b){
+    public double evaluate(double a, double b){
         switch (this){
             case DIVISION:
                 return a/b;

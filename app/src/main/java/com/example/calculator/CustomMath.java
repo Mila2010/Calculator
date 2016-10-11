@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Stack;
 
 import static com.example.calculator.Operator.ADDITION;
+import static com.example.calculator.Operator.CLOSED_PARENTHESES;
 import static com.example.calculator.Operator.DIVISION;
 import static com.example.calculator.Operator.MULTIPLICATION;
+import static com.example.calculator.Operator.OPEN_PARENTHESES;
 import static com.example.calculator.Operator.SUBTRACTION;
 
 /**
@@ -123,44 +125,93 @@ public class CustomMath {
         return Math.log(a);
     }
 
-    public int SciCalc(String userInput) {
-        List<String> inputs = Arrays.asList(userInput.split(" "));
+    public Number SciCalc(String userInput) {
+        System.out.println("User Input: " + userInput);
+        String s = checkParens(userInput);
+        String convertedUserInput = evalUserInput(s);
+
+        System.out.println("User input converted with spaces " + convertedUserInput);
+
+        List<String> inputs = Arrays.asList(convertedUserInput.split("\\s"));
+
+        System.out.println("Printing inputs as List after splitting " + inputs);
+
         for (String input : inputs) {
             switch (input.charAt(0)) {
-                case '+':
-                    operators.addLast(ADDITION);
-                    break;
-                case '-':
-                    // TOOD handle negative
-                    operators.addLast(SUBTRACTION);
-                    break;
-                case '/':
-                    operators.addLast(DIVISION);
+                case '(':
+                    operators.addLast(OPEN_PARENTHESES);
                     break;
                 case '*':
                     operators.addLast(MULTIPLICATION);
                     break;
+                case '/':
+                    operators.addLast(DIVISION);
+                    break;
+                case '+':
+                    operators.addLast(ADDITION);
+                    break;
+                // TODO handle negative
+                case '-':
+                    operators.addLast(SUBTRACTION);
+                    break;
+                case ')':
+                    operators.addLast(CLOSED_PARENTHESES);
+                    break;
                 default:
-                    values.addLast(Integer.parseInt(input));
+                    values.addLast(Double.parseDouble(input));
             }
         }
         // call methods
+        System.out.println("inputs before parentheses method " + inputs);
+        System.out.println("Operators before parenthese method " + operators);
+        System.out.println("Values before parentheses method " + values);
+
         multiplyDivide();
+
+        System.out.println("inputs before add/subtract " + inputs);
         addSubtract();
 
-        return (int) values.removeLast();
+        return values.removeLast();
+    }
+
+    private String evalUserInput(String s) {
+        String convertedUserInput = "";
+
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '+' || s.charAt(i) == '-' || s.charAt(i) == '*' || s.charAt(i) == '/') {
+                convertedUserInput += " " + s.charAt(i) + " ";
+            } else {
+                convertedUserInput += s.charAt(i);
+            }
+        }
+        return convertedUserInput;
+    }
+
+    public String checkParens(String userInput) {
+        String s = "";
+
+        for (int j = 0; j < userInput.length(); j++) {
+            if (userInput.charAt(j) == '(') {
+                s = userInput.substring(j + 1, userInput.indexOf(')'));
+                System.out.println(s);
+            }
+        }
+        return s;
     }
 
     public void addSubtract() {
+        System.out.println("Values in addSubtract()" + values);
+        System.out.println("Operators in addSubtract() " + operators);
+
         ArrayDeque<Number> valuesBuffer = new ArrayDeque<>();
         ArrayDeque<Operator> operatorsBuffer = new ArrayDeque<>();
 
-
         while (!operators.isEmpty()) {
-            int a = (Integer) values.removeFirst();
+            double a = (Double) values.removeFirst();
             Operator operator = operators.removeFirst();
+
             if (operator == ADDITION || operator == SUBTRACTION) {
-                int b = (Integer) values.removeFirst();
+                double b = (Double) values.removeFirst();
                 values.addFirst(operator.evaluate(a, b));
             } else {
                 valuesBuffer.addLast(a);
@@ -180,10 +231,10 @@ public class CustomMath {
         ArrayDeque<Operator> operatorsBuffer = new ArrayDeque<>();
 
         while (!operators.isEmpty()) {
-            int a = (Integer) values.removeFirst();
+            double a = (Double) values.removeFirst();
             Operator operator = operators.removeFirst();
             if (operator == MULTIPLICATION || operator == DIVISION) {
-                int b = (Integer) values.removeFirst();
+                double b = (Double) values.removeFirst();
                 values.addFirst(operator.evaluate(a, b));
             } else {
                 valuesBuffer.addLast(a);
