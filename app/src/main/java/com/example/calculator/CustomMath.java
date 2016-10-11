@@ -1,7 +1,15 @@
 package com.example.calculator;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
+
+import static com.example.calculator.Operator.ADDITION;
+import static com.example.calculator.Operator.DIVISION;
+import static com.example.calculator.Operator.MULTIPLICATION;
+import static com.example.calculator.Operator.SUBTRACTION;
 
 /**
  * Created by catwong on 10/4/16.
@@ -13,6 +21,8 @@ public class CustomMath {
     public final double E = Math.E;
     ArrayList<String> calculateThis = new ArrayList<>();
     Stack<String> calculateStack = new Stack<>();
+    ArrayDeque<Number> values = new ArrayDeque<>();
+    ArrayDeque<Operator> operators = new ArrayDeque<>();
 
 
     public double add(int firstNum, int secondNum) {
@@ -30,7 +40,7 @@ public class CustomMath {
         return firstNum * secondNum;
     }
 
-    public int divide(int firstNum, int secondNum) {
+    public double divide(int firstNum, int secondNum) {
         System.out.println("Divide " + firstNum + " by " + secondNum);
         return firstNum / secondNum;
     }
@@ -113,119 +123,77 @@ public class CustomMath {
         return Math.log(a);
     }
 
-    public int SciCalc(String input) {
-        for (int i = 0; i < input.length(); i++) {
-            String newString = Character.toString(input.charAt(i));
-            calculateThis.add(newString);
-        }
-        calculateThis.add(null);
-        Pemdas();
-        return 0;
-    }
-
-    public void numbersBetweenParentheses(String string) {
-
-    }
-
-    public int Pemdas() {
-        //System.out.println("Inside Pemdas() ");
-        System.out.println(calculateThis);
-        for (int i = 0; calculateThis.get(i) != null; i++) {
-//            System.out.println("Made it passed first for loop");
-            if (calculateThis.get(i).equals("(")) {
-                String newString = "";
-//                System.out.println("inside parentheses");
-//                System.out.println("i is " + calculateThis.get(i));
-                for (int j = i + 1; !calculateThis.get(j).equals(")"); j++) {
-                    newString += calculateThis.get(j);
-
-//                    System.out.println("not equal closing parenthesis");
-                    if (calculateThis.get(j + 1).equals("/") && calculateThis.get(j + 1) != null) {
-
-                        String firstNum = (String) calculateThis.get(j);
-                        calculateThis.remove(j);
-                        String operand = (String) calculateThis.get(j);
-                        calculateThis.remove(j);
-                        String secondNum = (String) calculateThis.get(j);
-//
-//                        System.out.println("First number is: " + firstNum + "index is " + (j));
-//                        System.out.println("Operand number is: " + operand + "index is " + (j));
-//                        System.out.println("Second number is: " + secondNum + "index is " + (j));
-
-                        int firstVal = Integer.parseInt(firstNum);
-                        int secondVal = Integer.parseInt(secondNum);
-                        int result = divide(firstVal, secondVal);
-                        String stringResult = Integer.toString(result);
-
-                        calculateThis.set(j, stringResult);
-                    }
-
-                    if (calculateThis.get(j + 1).equals("*") && calculateThis.get(j + 1) != null) {
-
-                        String firstNum = (String) calculateThis.get(j);
-                        calculateThis.remove(j);
-                        String operand = (String) calculateThis.get(j);
-                        calculateThis.remove(j);
-                        String secondNum = (String) calculateThis.get(j);
-//
-//                        System.out.println("First number is: " + firstNum + "index is " + (j));
-//                        System.out.println("Operand number is: " + operand + "index is " + (j));
-//                        System.out.println("Second number is: " + secondNum + "index is " + (j));
-
-                        int firstVal = Integer.parseInt(firstNum);
-                        int secondVal = Integer.parseInt(secondNum);
-                        int result = (int) multiply(firstVal, secondVal);
-                        String stringResult = Integer.toString(result);
-
-                        calculateThis.set(j, stringResult);
-                    }
-
-                    if (calculateThis.get(j + 1).equals("+") && calculateThis.get(j + 1) != null) {
-
-                        String firstNum = (String) calculateThis.get(j);
-                        calculateThis.remove(j);
-                        String operand = (String) calculateThis.get(j);
-                        calculateThis.remove(j);
-                        String secondNum = (String) calculateThis.get(j);
-//
-//                        System.out.println("First number is: " + firstNum + "index is " + (j));
-//                        System.out.println("Operand number is: " + operand + "index is " + (j));
-//                        System.out.println("Second number is: " + secondNum + "index is " + (j));
-
-                        int firstVal = Integer.parseInt(firstNum);
-                        int secondVal = Integer.parseInt(secondNum);
-                        int result = (int) add(firstVal, secondVal);
-                        String stringResult = Integer.toString(result);
-
-                        calculateThis.set(j, stringResult);
-                    }
-
-                    if (calculateThis.get(j + 1).equals("-") && calculateThis.get(j + 1) != null) {
-
-                        String firstNum = (String) calculateThis.get(j);
-                        calculateThis.remove(j);
-                        String operand = (String) calculateThis.get(j);
-                        calculateThis.remove(j);
-                        String secondNum = (String) calculateThis.get(j);
-//
-//                        System.out.println("First number is: " + firstNum + "index is " + (j));
-//                        System.out.println("Operand number is: " + operand + "index is " + (j));
-//                        System.out.println("Second number is: " + secondNum + "index is " + (j));
-
-                        int firstVal = Integer.parseInt(firstNum);
-                        int secondVal = Integer.parseInt(secondNum);
-                        int result = (int) subtract(firstVal, secondVal);
-                        String stringResult = Integer.toString(result);
-
-                        calculateThis.set(j, stringResult);
-                    }
-
-                    numbersBetweenParentheses(newString);
-                    System.out.println(calculateThis);
-                }
+    public int SciCalc(String userInput) {
+        List<String> inputs = Arrays.asList(userInput.split(" "));
+        for (String input : inputs) {
+            switch (input.charAt(0)) {
+                case '+':
+                    operators.addLast(ADDITION);
+                    break;
+                case '-':
+                    // TOOD handle negative
+                    operators.addLast(SUBTRACTION);
+                    break;
+                case '/':
+                    operators.addLast(DIVISION);
+                    break;
+                case '*':
+                    operators.addLast(MULTIPLICATION);
+                    break;
+                default:
+                    values.addLast(Integer.parseInt(input));
             }
-            return 0;
         }
-        return 0;
+        // call methods
+        multiplyDivide();
+        addSubtract();
+
+        return (int) values.removeLast();
+    }
+
+    public void addSubtract() {
+        ArrayDeque<Number> valuesBuffer = new ArrayDeque<>();
+        ArrayDeque<Operator> operatorsBuffer = new ArrayDeque<>();
+
+
+        while (!operators.isEmpty()) {
+            int a = (Integer) values.removeFirst();
+            Operator operator = operators.removeFirst();
+            if (operator == ADDITION || operator == SUBTRACTION) {
+                int b = (Integer) values.removeFirst();
+                values.addFirst(operator.evaluate(a, b));
+            } else {
+                valuesBuffer.addLast(a);
+                operatorsBuffer.addLast(operator);
+            }
+        }
+
+        valuesBuffer.addLast(values.removeFirst());
+
+        values.addAll(valuesBuffer);
+        operators.addAll(operatorsBuffer);
+    }
+
+
+    public void multiplyDivide() {
+        ArrayDeque<Number> valuesBuffer = new ArrayDeque<>();
+        ArrayDeque<Operator> operatorsBuffer = new ArrayDeque<>();
+
+        while (!operators.isEmpty()) {
+            int a = (Integer) values.removeFirst();
+            Operator operator = operators.removeFirst();
+            if (operator == MULTIPLICATION || operator == DIVISION) {
+                int b = (Integer) values.removeFirst();
+                values.addFirst(operator.evaluate(a, b));
+            } else {
+                valuesBuffer.addLast(a);
+                operatorsBuffer.addLast(operator);
+            }
+        }
+
+        valuesBuffer.addLast(values.removeFirst());
+
+        values.addAll(valuesBuffer);
+        operators.addAll(operatorsBuffer);
     }
 }
