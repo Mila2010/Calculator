@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,14 +9,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import static com.example.calculator.TypeConvertor.dToString;
 import static com.example.calculator.TypeConvertor.strToDouble;
 
 /**
  * Created by Millochka on 10/5/16.
  */
 
-public class PortraitFragment extends Fragment {
+public class PortraitFragment extends Fragment implements View.OnClickListener{
     public static String TAG = "PortraitFragment";
     public static final String CLASS="PortraitFragment";
 
@@ -39,6 +42,7 @@ public class PortraitFragment extends Fragment {
     private Button mButton44;
     private EditText mText;
     private TextView mResult;
+    //private Button mRad;
 
     private Double mTempResult;
     private String mOperator="";
@@ -46,6 +50,27 @@ public class PortraitFragment extends Fragment {
     private Double mFirstOperand;
     private Double mSecondOperand;
     private String mVisualization = " ";
+
+
+    private Button mRad;
+    private Button mDeg;
+    private Button mInv;
+    private Button mSin;
+    private Button mPi;
+    private Button mE;
+    private Button mAns;
+    private Button mCos;
+    private Button mTan;
+    private Button mExp;
+    private Button mFact;
+    private Button mln;
+    private Button mLog;
+    private Button mSquereRoot;
+    private Button mOParen;
+    private Button mCParen;
+    private Button mMod;
+
+    LandscapeFragment mPFragmnet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,97 +83,23 @@ public class PortraitFragment extends Fragment {
     @Override
     public void onViewCreated(View view,Bundle savedInstanceState ){
         super.onViewCreated(view,savedInstanceState);
-        mButton1 = (Button) view.findViewById(R.id.button1);
-        mButton2 = (Button) view.findViewById(R.id.button2);
-        mButton3 = (Button) view.findViewById(R.id.button3);
-        mButton4 = (Button) view.findViewById(R.id.button4);
-        mButton21 = (Button) view.findViewById(R.id.button21);
-        mButton22 = (Button) view.findViewById(R.id.button22);
-        mButton23 = (Button) view.findViewById(R.id.button23);
-        mButton24 = (Button) view.findViewById(R.id.button24);
-        mButton31 = (Button) view.findViewById(R.id.button31);
-        mButton32 = (Button) view.findViewById(R.id.button32);
-        mButton33 = (Button) view.findViewById(R.id.button33);
-        mButton34 = (Button) view.findViewById(R.id.button34);
-        mButton41 = (Button) view.findViewById(R.id.button41);
-        mButton42 = (Button) view.findViewById(R.id.button42);
-        mButton43 = (Button) view.findViewById(R.id.button43);
-        mButton44 = (Button) view.findViewById(R.id.button44);
-        mButton45 = (Button) view.findViewById(R.id.button45);
-//        mText = (EditText) findViewById(R.id.inputText);
-        mResult=(TextView) view.findViewById(R.id.outputText);
-        //mVisualizationView = (TextView) view.findViewById(R.id.outputText1);
+        if (getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT){
+            Initialization(view);
+            setOnClick();
+
+        }else if (getResources().getConfiguration().orientation==Configuration.ORIENTATION_LANDSCAPE){
+            Initialization(view);
+            setOnClick();
+            mPFragmnet = new LandscapeFragment();
+//            mRad= (Button) view.findViewById(R.id.Rad);
+//            mRad.setOnClickListener(this);
+//           mPFragmnet.toInitialize();
+//            mPFragmnet.setOnClick();
+            toInitializeS(view);
+
+        }
 
 
-        mButton1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton1);
-
-
-            }
-        });
-
-        mButton2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton2);
-
-            }
-        });
-
-        mButton3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton3);
-
-            }
-        });
-        mButton4.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton4);
-
-            }
-        });
-        mButton21.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton21);
-
-            }
-        });
-        mButton22.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton22);
-
-            }
-        });
-        mButton23.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton23);
-
-            }
-        });
-        mButton24.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton24);
-
-            }
-        });
-        mButton31.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton31);
-
-            }
-        });
-        mButton32.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton32);
-
-            }
-        });
-        mButton33.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                processOnClick(mButton33);
-
-            }
-        });
         mButton34.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mSecondOperand=strToDouble(mOperands);
@@ -158,31 +109,30 @@ public class PortraitFragment extends Fragment {
 
                     case "+":
                         mTempResult=mFirstOperand+mSecondOperand;
-                        mResult.setText(Double.toString(mTempResult));
-                        mOperands=Double.toString(mTempResult);
+                        mResult.setText(dToString(mTempResult));
+                        mOperands=dToString(mTempResult);
 
-                        mOperands=Double.toString(mTempResult);
                         break;
                     case "-":
                         mTempResult=mFirstOperand-mSecondOperand;
-                        mResult.setText(Double.toString(mTempResult));
-                        mOperands=Double.toString(mTempResult);
+                        Toast.makeText(getContext(),dToString(mFirstOperand) + " - "+dToString(mSecondOperand) + " = " + dToString(mTempResult),Toast.LENGTH_LONG).show();
 
-                        mOperands=Double.toString(mTempResult);
+                        mResult.setText(dToString(mTempResult));
+                        mOperands=dToString(mTempResult);
+
                         break;
                     case "*":
                         mTempResult=mFirstOperand*mSecondOperand;
-                        mResult.setText(Double.toString(mTempResult));
-                        mOperands=Double.toString(mTempResult);
+                        mResult.setText(dToString(mTempResult));
+                        mOperands=dToString(mTempResult);
 
-                        mOperands=Double.toString(mTempResult);
                         break;
-                    case "%":
-                        mTempResult=mFirstOperand/mSecondOperand;
-                        mResult.setText(Double.toString(mTempResult));
-                        mOperands=Double.toString(mTempResult);
+                    case "÷":
 
-                        mOperands=Double.toString(mTempResult);
+                        mTempResult=mFirstOperand/mSecondOperand;
+                        mResult.setText(dToString(mTempResult));
+                        mOperands=dToString(mTempResult);
+
                         break;
 
                 }
@@ -261,6 +211,52 @@ public class PortraitFragment extends Fragment {
         });
     }
 
+    public void Initialization(View view){
+        mButton1 = (Button) view.findViewById(R.id.button1);
+        mButton2 = (Button) view.findViewById(R.id.button2);
+        mButton3 = (Button) view.findViewById(R.id.button3);
+        mButton4 = (Button) view.findViewById(R.id.button4);
+        mButton21 = (Button) view.findViewById(R.id.button21);
+        mButton22 = (Button) view.findViewById(R.id.button22);
+        mButton23 = (Button) view.findViewById(R.id.button23);
+        mButton24 = (Button) view.findViewById(R.id.button24);
+        mButton31 = (Button) view.findViewById(R.id.button31);
+        mButton32 = (Button) view.findViewById(R.id.button32);
+        mButton33 = (Button) view.findViewById(R.id.button33);
+        mButton34 = (Button) view.findViewById(R.id.button34);
+        mButton41 = (Button) view.findViewById(R.id.button41);
+        mButton42 = (Button) view.findViewById(R.id.button42);
+        mButton43 = (Button) view.findViewById(R.id.button43);
+        mButton44 = (Button) view.findViewById(R.id.button44);
+        mButton45 = (Button) view.findViewById(R.id.button45);
+//        mText = (EditText) findViewById(R.id.inputText);
+        mResult=(TextView) view.findViewById(R.id.outputText);
+
+    }
+
+    public void setOnClick(){
+
+        mButton1.setOnClickListener(this);
+        mButton2.setOnClickListener(this);
+        mButton3.setOnClickListener(this);
+        mButton4.setOnClickListener(this);
+        mButton21.setOnClickListener(this);
+        mButton22.setOnClickListener(this);
+        mButton23.setOnClickListener(this);
+        mButton24.setOnClickListener(this);
+        mButton31.setOnClickListener(this);
+        mButton32.setOnClickListener(this);
+        mButton33.setOnClickListener(this);
+        mButton34.setOnClickListener(this);
+        mButton41.setOnClickListener(this);
+        mButton42.setOnClickListener(this);
+        mButton43.setOnClickListener(this);
+        mButton44.setOnClickListener(this);
+        mButton45.setOnClickListener(this);
+
+    }
+
+
     public void displayOperations(Button button){
         mVisualization += button.getText();
         mVisualizationView.setText(mVisualization);
@@ -271,7 +267,52 @@ public class PortraitFragment extends Fragment {
         mResult.setText(mOperands);
 
     }
+    public void processOnClicktest(Button button){
+        mOperands  +=button.getText();
+        mResult.setText(mOperands);
+
+    }
+
+    public void toInitializeS(View view){
+        mRad= (Button) view.findViewById(R.id.Rad);
+        mDeg= (Button) view.findViewById(R.id.Deg);
+        mInv= (Button) view.findViewById(R.id.Inv);
+        mSin= (Button) view.findViewById(R.id.sin);
+        mPi= (Button) view.findViewById(R.id.Pi);
+        mE= (Button) view.findViewById(R.id.E);
+        mAns= (Button) view.findViewById(R.id.Ans);
+        mCos= (Button) view.findViewById(R.id.cos);
+        mTan= (Button) view.findViewById(R.id.tan);
+        mExp= (Button) view.findViewById(R.id.Exp);
+        mFact= (Button) view.findViewById(R.id.fact);
+        mln= (Button) view.findViewById(R.id.ln);
+        mLog= (Button) view.findViewById(R.id.log);
+        mSquereRoot= (Button) view.findViewById(R.id.squerRoot);
+        mOParen= (Button) view.findViewById(R.id.oParen);
+        mCParen= (Button) view.findViewById(R.id.cParen);
+        mMod= (Button) view.findViewById(R.id.mod);
 
 
 
+    }
+
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()){
+            case R.id.button1:case R.id.button2:case R.id.button3:case R.id.button4:
+            case R.id.button21:case R.id.button22:case R.id.button23:case R.id.button24:
+            case R.id.button31:case R.id.button32:case R.id.button33:
+                Button tempButton=(Button) view.findViewById(view.getId());
+                processOnClick(tempButton);
+                break;
+
+            case R.id.Rad:case R.id.Inv:case R.id.sin:case R.id.Deg:case R.id.Ans:
+
+                Toast.makeText(view.getContext(),"It's working",Toast.LENGTH_LONG).show();
+                break;
+        }
+
+    }
 }

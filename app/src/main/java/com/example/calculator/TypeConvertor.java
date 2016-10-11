@@ -4,10 +4,28 @@ package com.example.calculator;
  * Created by Millochka on 10/9/16.
  */
 
-public abstract class TypeConvertor {
+public abstract class TypeConvertor{
 
 
-    public static int strToInt( String str ){
+public static String dToString(Double input){
+    String output = "";
+    String temp = Double.toString(input);
+    int i =0;
+        if(input%1==0){
+            while(temp.charAt(i)!='.'){
+                output+=temp.charAt(i);
+                i++;
+
+                }
+    }else{
+            output=temp;
+        }
+
+  return output;
+}
+
+
+    public static int strToInt(String str ){
         int i = 0;
         int num = 0;
         boolean isNeg = false;
