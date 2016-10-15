@@ -12,11 +12,9 @@ public class MainActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.start_page);
 
-//  if(getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT){
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new PortraitFragment(), PortraitFragment.TAG).commit();//}
-//            else if(getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE){
-//      getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new LandscapeFragment(), LandscapeFragment.TAG).commit();
-//  }
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new PortraitFragment(), PortraitFragment.TAG).commit();
+
 
         }
 

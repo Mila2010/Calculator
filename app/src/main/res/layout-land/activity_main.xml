@@ -347,7 +347,7 @@
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/button41"
+                android:id="@+id/ac"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

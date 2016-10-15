@@ -6,6 +6,7 @@ package com.example.calculator;
 
 public abstract class TypeConvertor{
 
+    private final static String TAG = "TypeConvertor";
 
 public static String dToString(Double input){
     String output = "";
@@ -74,7 +75,6 @@ public static String dToString(Double input){
 
                     reminder+=str.charAt(j)-'0';
                     reminder/=10;
-                    System.out.println(reminder);
 
                 }
 
@@ -90,4 +90,6 @@ public static String dToString(Double input){
             num = -num;
         return num;
     }
+
+
 }
