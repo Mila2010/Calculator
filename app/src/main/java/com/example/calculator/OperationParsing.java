@@ -12,28 +12,23 @@ import java.util.List;
 
 public class OperationParsing {
 
-
     private final String TAG = "OperationParsing";
-    public Expression expression ;
 
+    public Expression expression ;
     public Double result;
 
-    public OperationParsing(List<String> input){
 
+    public OperationParsing(List<String> input){              // TAKES IN A ARRAY OF NUMBERS + OPERATORS
         expression = new Expression(revertToString(input));
-
-        setResult(expression.calculate());
-
+        Log.d(TAG,revertToString(input));
+        setResult(expression.calculate());                    // CALCULATING
     }
-
-
 
     public Double getResult() {
         return result;
     }
 
     public void setResult(Double result) {
-
         this.result = result;
     }
 
