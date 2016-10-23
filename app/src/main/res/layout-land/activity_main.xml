@@ -59,7 +59,8 @@
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Inv"
+                android:hint="Inv"
+                android:textColorHint="#000000"
                 android:textAllCaps="false"
                 android:textSize="20dp"
                 android:background="#d49ece"/>
@@ -134,6 +135,7 @@
                 android:textSize="20dp"
                 android:textAllCaps="false"
                 android:background="#d49ece"/>
+
             <Button
                 android:id="@+id/Exp"
                 android:layout_weight="1"
@@ -174,7 +176,8 @@
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="log"
+                android:hint="log"
+                android:textColorHint="#000000"
                 android:textAllCaps="false"
                 android:textSize="20dp"
                 android:background="#d49ece"/>
