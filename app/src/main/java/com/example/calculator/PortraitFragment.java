@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +25,9 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.util.Set;
 
+import static com.example.calculator.R.id.cos;
 import static com.example.calculator.R.id.oParen;
+import static com.example.calculator.R.id.sin;
 import static com.example.calculator.TypeConvertor.dToString;
 
 ////import static com.example.calculator.R.raw.destiny1;
@@ -71,10 +74,10 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
     private Button mRad;
     private Button mDeg;
     private Button mInv;
-    private Button mSin;
     private Button mPi;
     private Button mE;
     private Button mAns;
+    private Button mSin;
     private Button mCos;
     private Button mTan;
     private Button mExp;
@@ -86,6 +89,8 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
     private Button mCParen;
     private Button mMod;
     private Button mAc;
+
+    boolean clickedTrig = false;
     static String mSavedFromTextView;
     private static boolean mIsRotated = false;
 
@@ -157,16 +162,17 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    // CHANGING THE ORIENTATION
     @Override
     public void onStart() {
         super.onStart();
         if (mIsRotated) {
-            mResult.setText(String.valueOf(mSavedFromTextView));     /// RETURNING THE VALUE FROM ORIENTATION
+            mResult.setText(String.valueOf(mSavedFromTextView));      // RETURN THE SAVED VALUE FROM PREVIOUS ORIENTATION
         } else {
             mResult.setText("");
         }
     }
-
+    // OPERANDS INITIALIZED
     public void Initialization(View view) {
         mButton1 = (Button) view.findViewById(R.id.button1);
         mButton2 = (Button) view.findViewById(R.id.button2);
@@ -186,11 +192,31 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
         mButton45 = (Button) view.findViewById(R.id.button45);
         mResult = (TextView) view.findViewById(R.id.outputText);
         history = (TextView) view.findViewById(R.id.outputHistory);
-
+    }
+    // SCIENTIFIC OPERATOR INITIALIZED
+    public void toInitializeS(View view) {
+        mRad = (Button) view.findViewById(R.id.Rad);
+        mDeg = (Button) view.findViewById(R.id.Deg);
+        mInv = (Button) view.findViewById(R.id.Inv);
+        mSin = (Button) view.findViewById(sin);
+        mPi = (Button) view.findViewById(R.id.Pi);
+        mE = (Button) view.findViewById(R.id.E);
+        mAns = (Button) view.findViewById(R.id.Ans);
+        mCos = (Button) view.findViewById(cos);
+        mTan = (Button) view.findViewById(R.id.tan);
+        mExp = (Button) view.findViewById(R.id.Exp);
+        mFact = (Button) view.findViewById(R.id.fact);
+        mln = (Button) view.findViewById(R.id.ln);
+        mLog = (Button) view.findViewById(R.id.log);
+        mSquereRoot = (Button) view.findViewById(R.id.squerRoot);
+        mOParen = (Button) view.findViewById(oParen);
+        mCParen = (Button) view.findViewById(R.id.cParen);
+        mMod = (Button) view.findViewById(R.id.mod);
+        mAc = (Button) view.findViewById(R.id.ac);
     }
 
+    // LANDSCAPE OPERANDS SET ONCLICK LISTENERS
     public void setOnClick() {
-
         mButton1.setOnClickListener(this);
         mButton2.setOnClickListener(this);
         mButton3.setOnClickListener(this);
@@ -207,7 +233,7 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
         mButton43.setOnClickListener(this);
         mButton45.setOnClickListener(this);
     }
-
+    // SCIENTIFIC OPERATORS SET ONCLICK LISTENERS
     public void setOnClickS() {
         mRad.setOnClickListener(this);
         mDeg.setOnClickListener(this);
@@ -257,43 +283,33 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
             mOperator = button.getText().toString();     // Assign the operatorbutton to the Operator
             mResult.setText(mOperator);                  // DISPLAY THE OPERATOR
             mOperandArray.set(mOperandArray.size() - 1, mOperator);  // Set the value at the end of the array
-            mOperatorClicked = true;                    // Operator Click is true
+            mOperatorClicked = true;                     // Operator Click is true
         }
         mClickEqual = false;
     }
 
-    public void toInitializeS(View view) {
-        mRad = (Button) view.findViewById(R.id.Rad);
-        mDeg = (Button) view.findViewById(R.id.Deg);
-        mInv = (Button) view.findViewById(R.id.Inv);
-        mSin = (Button) view.findViewById(R.id.sin);
-        mPi = (Button) view.findViewById(R.id.Pi);
-        mE = (Button) view.findViewById(R.id.E);
-        mAns = (Button) view.findViewById(R.id.Ans);
-        mCos = (Button) view.findViewById(R.id.cos);
-        mTan = (Button) view.findViewById(R.id.tan);
-        mExp = (Button) view.findViewById(R.id.Exp);
-        mFact = (Button) view.findViewById(R.id.fact);
-        mln = (Button) view.findViewById(R.id.ln);
-        mLog = (Button) view.findViewById(R.id.log);
-        mSquereRoot = (Button) view.findViewById(R.id.squerRoot);
-        mOParen = (Button) view.findViewById(oParen);
-        mCParen = (Button) view.findViewById(R.id.cParen);
-        mMod = (Button) view.findViewById(R.id.mod);
-        mAc = (Button) view.findViewById(R.id.ac);
-    }
-
     public void applyExpression(String function) {
-        if (mOperands.equals("")) {                  // IF THE NUMBER IS not clicked , THEN SHOW AN ERROR
+        if (mOperands.equals("") && mInv.equals("")) {                // Number & Inverse has empty values , THEN SHOW AN ERROR
             mResult.setText("ERROR");
         } else {
-            mOperandArray.add(mOperands);            // add Number to the OperandArray
+            mOperandArray.add(mOperands);                             // add Number to the OperandArray
             mResult.setText(function + "(" + mOperands + ")");        // DISPLAY the function
             mOperandArray.set(mOperandArray.size() - 1, function + "(" + mOperands + ")");  // Replace THE LAST INDEX WITH THE "function(#)" in the OperandArray
             mOperands = mOperandArray.get(mOperandArray.size() - 1);  // GET THE LAST VALUE IN OperandArray AND ASSIGN TO just Operand
             mOperandArray.remove(mOperandArray.size() - 1);           // Then, REMOVE THE LAST VALUE IN THE OperandArray
         }
     }
+    public void invExpression(String function) {
+        String[] sci = {"sin", "cos", "tan", "arcsin", "arccos", "arctang"};
+        if (Arrays.asList(sci).contains(function)) {
+            mOperandArray.add(mOperands);                                 // add Number to the OperandArray
+            mResult.setText(function + "(" + mOperands + ")");            // DISPLAY the function
+            mOperandArray.set(mOperandArray.size() - 1, function + "(" + mOperands + ")");  // Replace THE LAST INDEX WITH THE "function(#)" in the OperandArray
+            mOperands = mOperandArray.get(mOperandArray.size() - 1);      // GET THE LAST VALUE IN OperandArray AND ASSIGN TO just Operand
+            mOperandArray.remove(mOperandArray.size() - 1);               // Then, REMOVE THE LAST VALUE IN THE OperandArray
+        }
+    }
+
     @Override
     public void onClick(View view){
 
@@ -321,7 +337,6 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
                         String input = mOperandArray.get(i);
                         history.append(input);
                     }
-                    Log.d(TAG, String.valueOf(mOperandArray));//<---------------------------------------------------------------------------LOGGING
                     OperationParsing operationParsing = new OperationParsing(mOperandArray); // SEND OVER TO THE OPERATIONPARSING, WHERE IT CALCULATES
                     mTempResult = operationParsing.getResult();   // TEMPORARILY ASSIGNS THE ANSWER
                     mResult.setText(dToString(mTempResult));      // DISPLAY THE ANSWER
@@ -342,7 +357,7 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
                         mResult.setText(dToString(mTempResult));      // DISPLAY THE ANSWER
                         history.append("=" + dToString(mTempResult)); // Add the result to the history display
                         mOperands = dToString(mTempResult);           // Number assigns the temporary answer
-                        setaToast();                                  // Set a toast
+                        setaToast();  mClickEqual                                // Set a toast
                         mOperandArray.clear();
                     }
                     mResult.setText("");                          // If False, then show nothing
@@ -357,16 +372,36 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.Ans:
-                if (mOperandArray != null) {                         // IF NUMBER ARRAY IS NOT EMPTY
+                if (mOperandArray != null) {                      // IF NUMBER ARRAY IS NOT EMPTY
                     operationParsed.getResult();                  // GET ANSWER FROM OPERATION PARSED
                 }
                 break;
 
-            case R.id.Rad:case R.id.Inv:case R.id.Deg:
+            case R.id.Rad:case R.id.Deg:
             case R.id.log:
                 break;
 
-            case R.id.cos:case R.id.sin:case R.id.tan:case R.id.ln:
+            case R.id.Inv:
+                if(clickedTrig == false) {
+                    Log.d(TAG,String.valueOf(clickedTrig));
+                    mSin.setText("arcsin");
+                    mCos.setText("arccos");
+                    mTan.setText("arctan");
+                    clickedTrig = true;
+                }
+                else if(clickedTrig == true){
+                    Log.d(TAG,String.valueOf(clickedTrig));
+                    mSin.setText("sin");
+                    mCos.setText("cos");
+                    mTan.setText("tan");
+                    clickedTrig = false;
+                }
+                tempButton = (Button) view.findViewById(view.getId());
+                invExpression(tempButton.getText().toString());
+                mClickEqual = false;
+                break;
+
+            case cos:case sin:case R.id.tan:case R.id.ln:
                 tempButton = (Button) view.findViewById(view.getId());
                 applyExpression(tempButton.getText().toString());
                 mClickEqual = false;
@@ -378,27 +413,14 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case oParen:case R.id.cParen:
-                if (!mOperands.equals("")) {                                    // if the Operands are not empty
+                if (!mOperands.equals("")) {
                     mOperandArray.add(mOperands);
                     mOperands = "";
                 }
-                mClickEqual = true;
                 tempButton = (Button) view.findViewById(view.getId());
                 mOperandArray.add(tempButton.getText().toString());
-                processOnClickNumbers(tempButton);
-                mResult.append(tempButton.getText().toString());
+                mResult.setText(tempButton.getText().toString());
                 break;
-//
-//            case R.id.cParen:
-//                if (!mOperands.equals("")) {                                    // if the Operands are not empty
-//                    mOperandArray.add(mOperands);
-////                    mOperands = "";
-//                }
-//                mClickEqual = true;
-//                tempButton = (Button) view.findViewById(view.getId());
-//                mOperandArray.add(tempButton.getText().toString());
-//                mResult.append(tempButton.getText().toString());
-//                break;
         }
     }
 
@@ -415,25 +437,25 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
                 toast.setView(view);                                            // YOU SET THE TOAST VIEW WITH THE IMAGE, YOU CAN FIND MORE METHODS IN THE TOAST.JAVA CLASS
                 toast.show();                                                   // DISPLAY THE TOAST
                 break;
-            case 1:
+            case 2:
                 view.setImageResource(R.drawable.thisisanothercat);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setView(view);
                 toast.show();
                 break;
-            case 2:
+            case 4:
                 view.setImageResource(R.drawable.milatoastin);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setView(view);
                 toast.show();
                 break;
-            case 3:
+            case 6:
                 view.setImageResource(R.drawable.wesnietoastin);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setView(view);
                 toast.show();
                 break;
-            case 4:
+            case 8:
                 view.setImageResource(R.drawable.hyuntoastin);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setView(view);
@@ -442,9 +464,11 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
+    /*
+    * ANDROID SAVING INFO (WHEN THE ORIENTATION IS CHANGED, IT WILL CALL THE ONSAVEDINSTANCESTATE
+    * */
     @Override
-    public void onSaveInstanceState(Bundle outState) {   //ANDROID SAVING SOME STATES (WHEN THE LAYOUT IS CHANGED, IT WILL CALL THE ONSAVEDINSTANCESTATE
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -461,8 +485,5 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
         editor.putStringSet("mOperandArray", set);
         editor.apply();
         editor.commit();
-
     }
-
-
 }
