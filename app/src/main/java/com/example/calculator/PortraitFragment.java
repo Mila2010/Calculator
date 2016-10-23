@@ -309,11 +309,18 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
             mOperandArray.remove(mOperandArray.size() - 1);               // Then, REMOVE THE LAST VALUE IN THE OperandArray
         }
     }
+    private void conversion(String function) {
+        mOperandArray.add(mOperands);                             // add Number to the OperandArray
+        mResult.setText(function + "(" + mOperands + ")");        // DISPLAY the function
+        mOperandArray.set(mOperandArray.size() - 1, function + "(" + mOperands + ")");  // Replace THE LAST INDEX WITH THE "function(#)" in the OperandArray
+        mOperands = mOperandArray.get(mOperandArray.size() - 1);  // GET THE LAST VALUE IN OperandArray AND ASSIGN TO just Operand
+        mOperandArray.remove(mOperandArray.size() - 1);           // Then, REMOVE THE LAST VALUE IN THE OperandArray
+    }
 
     @Override
     public void onClick(View view){
 
-        Button tempButton;
+        Button tempButton = (Button) view.findViewById(view.getId());
         OperationParsing operationParsed = null;
         MediaPlayer soundThree = MediaPlayer.create(getContext(), R.raw.sound_three);
         soundThree.start();
@@ -353,21 +360,20 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
                         theLastSciOps+= mOperands + ")";
                         mOperandArray.add(theLastSciOps);
                         OperationParsing parseSciOps = new OperationParsing(mOperandArray);
-                        mTempResult = parseSciOps.getResult();   // TEMPORARILY ASSIGNS THE ANSWER
+                        mTempResult = parseSciOps.getResult();        // TEMPORARILY ASSIGNS THE ANSWER
                         mResult.setText(dToString(mTempResult));      // DISPLAY THE ANSWER
                         history.append("=" + dToString(mTempResult)); // Add the result to the history display
                         mOperands = dToString(mTempResult);           // Number assigns the temporary answer
-                        setaToast();  mClickEqual                                // Set a toast
+                        setaToast();                                  // Set a toast
                         mOperandArray.clear();
                     }
-                    mResult.setText("");                          // If False, then show nothing
+                    mResult.setText("");                              // If False, then show nothing
                 }
-                mClickEqual = true;                               // set ClickEqual = true.
+                mClickEqual = true;                                   // set ClickEqual = true
                 break;
 
             // DIVISION , MULTIPLY, PLUS
             case R.id.button42:case R.id.button43:case R.id.button45:
-                tempButton = (Button) view.findViewById(view.getId());
                 processOnClickOperators(tempButton);
                 break;
 
@@ -378,7 +384,12 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.Rad:case R.id.Deg:
+                conversion(tempButton.getText().toString());
+                break;
+
             case R.id.log:
+                mLog.setText("log10");
+                conversion(tempButton.getText().toString());
                 break;
 
             case R.id.Inv:
@@ -396,7 +407,6 @@ public class PortraitFragment extends Fragment implements View.OnClickListener {
                     mTan.setText("tan");
                     clickedTrig = false;
                 }
-                tempButton = (Button) view.findViewById(view.getId());
                 invExpression(tempButton.getText().toString());
                 mClickEqual = false;
                 break;
