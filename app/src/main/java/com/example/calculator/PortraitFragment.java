@@ -20,18 +20,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 import java.util.Set;
 
+import static com.example.calculator.R.id.oParen;
 import static com.example.calculator.TypeConvertor.dToString;
+
+////import static com.example.calculator.R.raw.destiny1;
+//import static com.example.calculator.R.raw.destiny2;
+//import static com.example.calculator.R.raw.destiny3;
 
 /**
  * Created by Millochka on 10/5/16.
  */
 
-public class PortraitFragment extends Fragment implements View.OnClickListener{
-    public static String TAG = "PortraitFragment";
-    private boolean mClickEqual=false;
+public class PortraitFragment extends Fragment implements View.OnClickListener {
+    public static String TAG = "PortraitFragment = ";
+    private boolean mClickEqual = false;
     private SharedPreferences mSharedPreferences;
     private Button mButton1;
     private Button mButton2;
@@ -55,12 +61,12 @@ public class PortraitFragment extends Fragment implements View.OnClickListener{
     private boolean mOperatorClicked = false;
 
     private Double mTempResult;
-    private static String mOperator="";
-    private String mOperands="";
-    private static String mFirstOperand="";
-    private static Double mSecondOperand=0.0;
+    private static String mOperator = "";
+    private String mOperands = "";
+    private static String mFirstOperand = "";
+    private static Double mSecondOperand = 0.0;
 
-    private static List<String> mOperandArray= new ArrayList<>();
+    private static List<String> mOperandArray = new ArrayList<>();
 
     private Button mRad;
     private Button mDeg;
@@ -86,101 +92,82 @@ public class PortraitFragment extends Fragment implements View.OnClickListener{
 
     // BEGINNING OF GRAPHIC INSTALL, RETURNING A VIEW FROM HERE.
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.activity_main,container, false);
-        return view;}
-
+        View view = inflater.inflate(R.layout.activity_main, container, false);
+        return view;
+    }
 
     // THIS GIVES SUBCLASSES A CHANCE TO INITIALIZE THEMSELVES ONCE THEY KNOW
     // THEIR VIEW HEIRARCHY HAS BEEN COMPLETELY CREATE.
     @Override
-    public void onViewCreated(View view,Bundle savedInstanceState ){
-        super.onViewCreated(view,savedInstanceState);
-        MediaPlayer soundThree = MediaPlayer.create(getContext(), R.raw.sound_three);
-
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         // TO GET THE CURRENT CONFIGURATION ORIENTATION
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             Initialization(view);
             mButton41 = (Button) view.findViewById(R.id.button41);                  // PORTRAIT'S DELETE BUTTON
-            mButton41.setOnClickListener(new View.OnClickListener() {
+            mButton41.setOnClickListener(new View.OnClickListener() {               // PASS CLICKS
                 public void onClick(View v) {
                     MediaPlayer soundThree = MediaPlayer.create(getContext(), R.raw.sound_three);
                     soundThree.start();
-                    if(mOperands.length()>0){                                       // IF THERE ARE NUMBERS, DELETE FROM THE END TO ZERO
-                         mOperands = mOperands.substring(0, mOperands.length()-1);
+                    if (mOperands.length() > 0) {                                       // IF THERE ARE NUMBERS, DELETE FROM THE END TO ZERO
+                        mOperands = mOperands.substring(0, mOperands.length() - 1);
+                    } else {
+                        mOperands = "";
                     }
-                    else{
-                        mOperands="";
-                        Log.d(TAG,"this is the else" + mOperands);
-                    }
-                    mResult.setText(mOperands);                                     // DISPLAY THE RESULT
+                    mResult.setText(mOperands);                                     // RESET TEXT
                 }
             });
-            setOnClick();                                                           // THIS IS WHERE WE INITIALIZE THE PORTRAIT BUTTONSSSS
-        }else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){     // THIS IS LANDSCAPE MODE
-            Initialization(view);
+            setOnClick();
+        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {     // THIS IS LANDSCAPE MODE
+            Initialization(view);                                                                            // PASS CLICKS
             setOnClick();
             toInitializeS(view);
             setOnClickS();
         }
-
-        // ACTIVITIES HAVE THE ABILITY, UNDER SPECIAL CIRCUMSTANCES,
         // TO RESTORE THEMSELVES TO A PREVIOUS STATE USING THE DATE STORED IN THIS BUNDLE.
-
-        if (savedInstanceState != null) {                                           //  SHARE PORTRAIT TO LANDSCAPE
-            mSharedPreferences=getActivity().getPreferences(Context.MODE_PRIVATE);  // DEFAULT OPERATION
-            mClickEqual=mSharedPreferences.getBoolean("mClickEqual",false);         // TRUE OR FALSE
-            mSavedFromTextView = mSharedPreferences.getString("mResult","7");       //
-            mOperator=mSharedPreferences.getString("mOperator","");
-            mFirstOperand = mSharedPreferences.getString("mFirstOperand","0");
-            mClickEqual=mSharedPreferences.getBoolean("mClickEqual",false);
+        if (savedInstanceState != null) {
+            mSharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);  // GET THE SAVED VALUES
+            mClickEqual = mSharedPreferences.getBoolean("mClickEqual", false);         // INITIALLY FALSE
+            mSavedFromTextView = mSharedPreferences.getString("mResult", "7");       // mSavedFromTextView = "7"
+            mOperator = mSharedPreferences.getString("mOperator", "");                 // Operator = ""
+            mFirstOperand = mSharedPreferences.getString("mFirstOperand", "0");      // First Number = "0"
+            mClickEqual = mSharedPreferences.getBoolean("mClickEqual", false);
             mIsRotated = true;
-
-            Set<String> set = mSharedPreferences.getStringSet("mOperandArray", null); // DOES NOT ACCEPT DUPLICATE ELEMENTS
-            mOperandArray = new ArrayList<String>(set);                               // ASSIGNIN TO THE OPERANDARRAY
-
-            Collections.reverse(mOperandArray);                                     // ARRAY IS RUNNING BACKWARDS
-
-//            Log.d(TAG, "mClickEqual "+ Boolean.toString(mSharedPreferences.getBoolean("mClickEqual",false)));
-//            Log.d(TAG, "mResult "+mSharedPreferences.getString("mResult","7"));
-//            Log.d(TAG, mSharedPreferences.getString("mResult","7"));
-//            Log.d(TAG, "mOperator "+mOperator);
-//            Log.d(TAG, "mFirstOperand "+mSharedPreferences.getString("mFirstOperand","0"));
-//            for(int i=0; i<mOperandArray.size();i++){
-//                Log.d(TAG, "mOperandArray: "+mOperandArray.get(i));
-//            }
+            Set<String> set = mSharedPreferences.getStringSet("mOperandArray", null); // Pass List of String
+            mOperandArray = new ArrayList<String>(set);                               // ASSIGNING TO THE OPERAND ARRAY
+            Collections.reverse(mOperandArray);                                       // PRINT IN ORDER
         }
-
         // MINUS BUTTON
         mButton44.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 MediaPlayer soundThree = MediaPlayer.create(getContext(), R.raw.sound_three);
                 soundThree.start();
                 // AS LONG AS THERE IS NOT OPERATOR
-                if(mOperator.equals("")&& mOperands.equals("")||!mOperator.equals("") && mOperands.equals("")){
+                if (mOperator.equals("") && mOperands.equals("") || !mOperator.equals("") && mOperands.equals("")) {
                     mOperands = mOperands + mButton44.getText();     /// THE " # - " OR "-"
                     mResult.setText(mOperands);                      /// DISPLAY THE " # - " OR " - "
-                    mClickEqual=false;                               /// SHARE FALSE FOR LANDSCAPE MODE
-                    }
-                else{
+                    mClickEqual = false;                               /// SHARE FALSE FOR LANDSCAPE MODE
+                } else {
                     processOnClickOperators(mButton44);              /// OTHERWISE, PROCEED TO OPERATORS
                 }
             }
         });
-    }                                                                                   // END OF VIEW ONCREATE
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        if(mIsRotated){
-            mResult.setText(String.valueOf(mSavedFromTextView));
-        }else{
-        mResult.setText("");}
     }
 
-    public void Initialization(View view){
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mIsRotated) {
+            mResult.setText(String.valueOf(mSavedFromTextView));     /// RETURNING THE VALUE FROM ORIENTATION
+        } else {
+            mResult.setText("");
+        }
+    }
+
+    public void Initialization(View view) {
         mButton1 = (Button) view.findViewById(R.id.button1);
         mButton2 = (Button) view.findViewById(R.id.button2);
         mButton3 = (Button) view.findViewById(R.id.button3);
@@ -193,17 +180,16 @@ public class PortraitFragment extends Fragment implements View.OnClickListener{
         mButton32 = (Button) view.findViewById(R.id.button32);
         mButton33 = (Button) view.findViewById(R.id.button33);
         mButton34 = (Button) view.findViewById(R.id.button34);
-
         mButton42 = (Button) view.findViewById(R.id.button42);
         mButton43 = (Button) view.findViewById(R.id.button43);
         mButton44 = (Button) view.findViewById(R.id.button44);
         mButton45 = (Button) view.findViewById(R.id.button45);
-        mResult=(TextView) view.findViewById(R.id.outputText);
-        history=(TextView) view.findViewById(R.id.outputHistory);
+        mResult = (TextView) view.findViewById(R.id.outputText);
+        history = (TextView) view.findViewById(R.id.outputHistory);
 
     }
 
-    public void setOnClick(){
+    public void setOnClick() {
 
         mButton1.setOnClickListener(this);
         mButton2.setOnClickListener(this);
@@ -220,10 +206,9 @@ public class PortraitFragment extends Fragment implements View.OnClickListener{
         mButton42.setOnClickListener(this);
         mButton43.setOnClickListener(this);
         mButton45.setOnClickListener(this);
-
     }
 
-    public void setOnClickS(){
+    public void setOnClickS() {
         mRad.setOnClickListener(this);
         mDeg.setOnClickListener(this);
         mInv.setOnClickListener(this);
@@ -244,200 +229,211 @@ public class PortraitFragment extends Fragment implements View.OnClickListener{
         mAc.setOnClickListener(this);
     }
 
-
-    public void processOnClickNumbers(Button button){
-        if(mClickEqual){                        // IF FALSE,
-            Log.d(TAG, "processOnClickNumbers : " + mClickEqual);
-            mOperands="";}                      // CLEAR NUMBER
-            mOperands  +=button.getText();      // ADD THE OPERATOR INTO THE NUMBER
-        mResult.setText(mOperands);              // DISPLAY TO THE SCREEN AND ADD TO WHATEVER IS THERE
-        mOperatorClicked=false;                 // OPERATOR NOT CLICKED
-        mClickEqual=false;                      //
+    public void processOnClickNumbers(Button button) {
+        if (mClickEqual) {                      // IF FALSE,
+            mOperands = "";                     // CLEAR Operands
+            Log.d(TAG,mOperands);//<---------------------------------------------------------------------------LOGGING
+        }                                       // ELSE TRUE,
+        mOperands += button.getText();          // ADD number(s) clicked to Operands
+        Log.d(TAG,mOperands);//<---------------------------------------------------------------------------LOGGING
+        mResult.setText(mOperands);             // DISPLAY number(s)
+        Log.d(TAG,"mResult");//<---------------------------------------------------------------------------LOGGING
+        mOperatorClicked = false;               // OPERATOR is false
+        mClickEqual = false;                    // CLICKEQUAL is false
     }
 
-    public void processOnClickOperators(Button button){
-
-        if(!mOperatorClicked){              // YES, OPERATOR CLICKED
-        mFirstOperand = mOperands;          // FIRST NUMBER ASSIGNED
-        mOperandArray.add(mOperands);       // ADD THE FIRST NUMBER TO THE NUMBER ARRAY
-            mOperands="";                   // OPERANDS = NULL
-
-        mOperator=button.getText().toString();       // OPERATOR STRING == OPERATOR BUTTON
-        mOperandArray.add(mOperator);                // ADD THE OPERATOR TO THE NUMBER ARRAY
-        mResult.setText(mOperator);                  // DISPLAY OPERATOR CLICKED
-        mOperatorClicked=true;                       // OPERATORCLICKED IS TRUE, FOR THE LANDSCAPE
-//            for(int i=0; i<mOperandArray.size();i++){
-//                Log.d(TAG, "mOperandArray: "+mOperandArray.get(i));
-//            }
-        } else{                                     // IF NO OPERATOR CLICKED
-            mOperator=button.getText().toString();  // ASSIGN OPERATOR STRING TO THE OPERATOR THAT WAS CLICKED
-            mResult.setText(mOperator);             //  DISPLAY THE OPERATOR
-            mOperandArray.set(mOperandArray.size()-1,mOperator);  // THE INDEX OF THE OPERAND AND THE VALUE
-            mOperatorClicked=true;                  // OPERATOR CLICKED
+    public void processOnClickOperators(Button button) {
+        if (!mOperatorClicked) {                // Operator Clicked is TRUE
+            Log.d(TAG,Boolean.toString(mOperatorClicked));//<---------------------------------------------------------------------------LOGGING
+            mFirstOperand = mOperands;          // Assign number as First Number
+            Log.d(TAG,mFirstOperand);//<---------------------------------------------------------------------------LOGGING
+            mOperandArray.add(mOperands);       // ADD THE FIRST NUMBER TO THE NUMBER ARRAY
+            mOperands = "";                     // clear numbers
+            mOperator = button.getText().toString();     // Assign the button clicked to the operator
+            mOperandArray.add(mOperator);                // Then, ADD THE OPERATOR TO THE NUMBER ARRAY
+            mResult.setText(mOperator);                  // Display the Operator
+            mOperatorClicked = true;                     // Operator Clicked is true
+        } else {                                         // Else , false :
+            mOperator = button.getText().toString();     // Assign the operatorbutton to the Operator
+            mResult.setText(mOperator);                  // DISPLAY THE OPERATOR
+            mOperandArray.set(mOperandArray.size() - 1, mOperator);  // Set the value at the end of the array
+            mOperatorClicked = true;                    // Operator Click is true
         }
-        mClickEqual=false;
+        mClickEqual = false;
     }
 
-    public void toInitializeS(View view){
-        mRad= (Button) view.findViewById(R.id.Rad);
-        mDeg= (Button) view.findViewById(R.id.Deg);
-        mInv= (Button) view.findViewById(R.id.Inv);
-        mSin= (Button) view.findViewById(R.id.sin);
-        mPi= (Button) view.findViewById(R.id.Pi);
-        mE= (Button) view.findViewById(R.id.E);
-        mAns= (Button) view.findViewById(R.id.Ans);
-        mCos= (Button) view.findViewById(R.id.cos);
-        mTan= (Button) view.findViewById(R.id.tan);
-        mExp= (Button) view.findViewById(R.id.Exp);
-        mFact= (Button) view.findViewById(R.id.fact);
-        mln= (Button) view.findViewById(R.id.ln);
-        mLog= (Button) view.findViewById(R.id.log);
-        mSquereRoot= (Button) view.findViewById(R.id.squerRoot);
-        mOParen= (Button) view.findViewById(R.id.oParen);
-        mCParen= (Button) view.findViewById(R.id.cParen);
-        mMod= (Button) view.findViewById(R.id.mod);
-        mAc=(Button) view.findViewById(R.id.ac);
-
-
+    public void toInitializeS(View view) {
+        mRad = (Button) view.findViewById(R.id.Rad);
+        mDeg = (Button) view.findViewById(R.id.Deg);
+        mInv = (Button) view.findViewById(R.id.Inv);
+        mSin = (Button) view.findViewById(R.id.sin);
+        mPi = (Button) view.findViewById(R.id.Pi);
+        mE = (Button) view.findViewById(R.id.E);
+        mAns = (Button) view.findViewById(R.id.Ans);
+        mCos = (Button) view.findViewById(R.id.cos);
+        mTan = (Button) view.findViewById(R.id.tan);
+        mExp = (Button) view.findViewById(R.id.Exp);
+        mFact = (Button) view.findViewById(R.id.fact);
+        mln = (Button) view.findViewById(R.id.ln);
+        mLog = (Button) view.findViewById(R.id.log);
+        mSquereRoot = (Button) view.findViewById(R.id.squerRoot);
+        mOParen = (Button) view.findViewById(oParen);
+        mCParen = (Button) view.findViewById(R.id.cParen);
+        mMod = (Button) view.findViewById(R.id.mod);
+        mAc = (Button) view.findViewById(R.id.ac);
     }
 
-    public void applyExspression(String function){  // APPLY EXPRESSIONSSSSSSSSSS
-
-        if(!mOperands.equals("")){                  // IF THE NUMBER IS NOT "" , THEN THERE IS AN ERROR
+    public void applyExpression(String function) {
+        if (mOperands.equals("")) {                  // IF THE NUMBER IS not clicked , THEN SHOW AN ERROR
             mResult.setText("ERROR");
+        } else {
+            mOperandArray.add(mOperands);            // add Number to the OperandArray
+            mResult.setText(function + "(" + mOperands + ")");        // DISPLAY the function
+            mOperandArray.set(mOperandArray.size() - 1, function + "(" + mOperands + ")");  // Replace THE LAST INDEX WITH THE "function(#)" in the OperandArray
+            mOperands = mOperandArray.get(mOperandArray.size() - 1);  // GET THE LAST VALUE IN OperandArray AND ASSIGN TO just Operand
+            mOperandArray.remove(mOperandArray.size() - 1);           // Then, REMOVE THE LAST VALUE IN THE OperandArray
         }
-        mOperandArray.add(mOperands);               // APPLY OPERANDS TO THE OPERAND STRING
-        mResult.append(function);                   // DISPLAY THE FUNCTION
-        mOperandArray.set(mOperandArray.size()-1,function +"("+mOperands+")");        //SET THE LAST THING WITH THE (#)
-        mOperands=mOperandArray.get(mOperandArray.size()-1);  // ASSIGN OPERANDS STRING, GET THE LAST THING IN THE OPERAND STRING
-        mOperandArray.remove(mOperandArray.size()-1);         // REMOVE THE LAST THING ON THE OPERAND STRING
     }
-
     @Override
-    public void onClick(View view) {
+    public void onClick(View view){
 
         Button tempButton;
         OperationParsing operationParsed = null;
         MediaPlayer soundThree = MediaPlayer.create(getContext(), R.raw.sound_three);
+        soundThree.start();
 
-        switch (view.getId()){
+        switch (view.getId()) {
 
             // OPERANDS
             case R.id.button1:case R.id.button2:case R.id.button3:case R.id.button4:
             case R.id.button21:case R.id.button22:case R.id.button23:case R.id.button24:
             case R.id.button31:case R.id.button32:case R.id.button33:
-                soundThree.start();
-                tempButton=(Button) view.findViewById(view.getId());
+                tempButton = (Button) view.findViewById(view.getId());
                 processOnClickNumbers(tempButton);
                 break;
 
             // EQUAL BUTTON
             case R.id.button34:
-                if(!mClickEqual){                           // IF TRUE
-                    soundThree.start();
+                if (!mClickEqual) {                         // if TRUE or NOT FALSE
                     history.setText("");                    // RESET THE HISTORY
                     mOperandArray.add(mOperands);           // ADD NUMBER INTO THE NUMBER ARRAY
-                    for(int i = 0; i < mOperandArray.size();i++) { // ADD EACH INPUT TO THE ARRAY
+                    for (int i = 0; i < mOperandArray.size(); i++) { // ADD EACH INPUT TO THE ARRAY
                         String input = mOperandArray.get(i);
                         history.append(input);
                     }
+                    Log.d(TAG, String.valueOf(mOperandArray));//<---------------------------------------------------------------------------LOGGING
                     OperationParsing operationParsing = new OperationParsing(mOperandArray); // SEND OVER TO THE OPERATIONPARSING, WHERE IT CALCULATES
-                    mTempResult= operationParsing.getResult();   // TEMPORARILY ASSIGNS THE ANSWER
-                    mResult.setText(dToString(mTempResult));     // DISPLAY THE ANSWER
-                    history.append("=" + dToString(mTempResult));
-                    mOperands=dToString(mTempResult);            // CONVERT THE ANSWER TO NUMBER
-                    setaToast();
-
-                    Log.d(TAG,"EQUAL BUTTON: " + !mClickEqual);
-                    Log.d(TAG,"EQUAL BUTTON: " + history);
-                    Log.d(TAG,"EQUAL BUTTON: " + mTempResult);
-                    Log.d(TAG,"EQUAL BUTTON: " + mResult);
-                    Log.d(TAG,"EQUAL BUTTON: " + mOperands);
-
-                mOperandArray.clear();                       // CLEAR THE NUMBER ARRAY
-                } else {
-                    mResult.setText("");                     // ELSE NOTHING
+                    mTempResult = operationParsing.getResult();   // TEMPORARILY ASSIGNS THE ANSWER
+                    mResult.setText(dToString(mTempResult));      // DISPLAY THE ANSWER
+                    history.append("=" + dToString(mTempResult)); // Add the result to the history display
+                    mOperands = dToString(mTempResult);           // Number assigns the temporary answer
+                    setaToast();                                  // Set a toast
+                    mOperandArray.clear();                        // CLEAR OperandArray
+                } else if (mClickEqual){
+                    history.setText("");                    // RESET THE HISTORY
+                    // this ListIterator will read the mOperandArray backwards and get the last item
+                    for (ListIterator<String> scientificOps = mOperandArray.listIterator(mOperandArray.size()); scientificOps.hasPrevious(); ) {
+                        // the last value in the OperandArray is assigned to "theLastSciOps"
+                        String theLastSciOps = scientificOps.previous();
+                        theLastSciOps+= mOperands + ")";
+                        mOperandArray.add(theLastSciOps);
+                        OperationParsing parseSciOps = new OperationParsing(mOperandArray);
+                        mTempResult = parseSciOps.getResult();   // TEMPORARILY ASSIGNS THE ANSWER
+                        mResult.setText(dToString(mTempResult));      // DISPLAY THE ANSWER
+                        history.append("=" + dToString(mTempResult)); // Add the result to the history display
+                        mOperands = dToString(mTempResult);           // Number assigns the temporary answer
+                        setaToast();                                  // Set a toast
+                        mOperandArray.clear();
+                    }
+                    mResult.setText("");                          // If False, then show nothing
                 }
-                mClickEqual=true;
+                mClickEqual = true;                               // set ClickEqual = true.
                 break;
 
+            // DIVISION , MULTIPLY, PLUS
             case R.id.button42:case R.id.button43:case R.id.button45:
-                soundThree.start();
-                tempButton=(Button) view.findViewById(view.getId());
+                tempButton = (Button) view.findViewById(view.getId());
                 processOnClickOperators(tempButton);
                 break;
 
             case R.id.Ans:
-                soundThree.start();
-                if(mOperandArray!=null) {
-                    operationParsed.getResult();
-                    Log.d(TAG,"ANSWER : " + operationParsed.getResult());
+                if (mOperandArray != null) {                         // IF NUMBER ARRAY IS NOT EMPTY
+                    operationParsed.getResult();                  // GET ANSWER FROM OPERATION PARSED
                 }
                 break;
 
             case R.id.Rad:case R.id.Inv:case R.id.Deg:
-            case R.id.cos: case R.id.sin:case R.id.tan:case R.id.log:case R.id.ln:
-                soundThree.start();
-                tempButton=(Button) view.findViewById(view.getId());
-                applyExspression(tempButton.getText().toString());
-                mClickEqual=false;
+            case R.id.log:
+                break;
+
+            case R.id.cos:case R.id.sin:case R.id.tan:case R.id.ln:
+                tempButton = (Button) view.findViewById(view.getId());
+                applyExpression(tempButton.getText().toString());
+                mClickEqual = false;
                 break;
 
             case R.id.ac:
-                soundThree.start();
-                mOperands="";
+                mOperands = "";
                 mResult.setText("");
                 break;
 
-            case R.id.oParen:case R.id.cParen:
-                soundThree.start();
-                if(!mOperands.equals("")){
+            case oParen:case R.id.cParen:
+                if (!mOperands.equals("")) {                                    // if the Operands are not empty
                     mOperandArray.add(mOperands);
-                    mOperands="";
+                    mOperands = "";
                 }
-                tempButton=(Button) view.findViewById(view.getId());
+                mClickEqual = true;
+                tempButton = (Button) view.findViewById(view.getId());
                 mOperandArray.add(tempButton.getText().toString());
-                mResult.setText(tempButton.getText().toString());
+                processOnClickNumbers(tempButton);
+                mResult.append(tempButton.getText().toString());
                 break;
+//
+//            case R.id.cParen:
+//                if (!mOperands.equals("")) {                                    // if the Operands are not empty
+//                    mOperandArray.add(mOperands);
+////                    mOperands = "";
+//                }
+//                mClickEqual = true;
+//                tempButton = (Button) view.findViewById(view.getId());
+//                mOperandArray.add(tempButton.getText().toString());
+//                mResult.append(tempButton.getText().toString());
+//                break;
         }
-
     }
 
-    private void setaToast() {
-        Random random = new Random();
-        int num = random.nextInt(4);
-        Toast toast = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
-        ImageView view = new ImageView(getContext());
+    private void setaToast() {                                                  // SET A TOAST METHOD
+        Random random = new Random();                                           // CREATE A NEW RANDOM
+        int num = random.nextInt(10);                                           // RANDOMLY SELECT FROM 0 TO 9 NUMBERS
+        Toast toast = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);     // CREATE A TOAST
+        ImageView view = new ImageView(getContext());                           // CREATE AN IMAGEVIEW TO PASS
 
-        MediaPlayer destiny1 = MediaPlayer.create(getContext(), R.raw.destiny1);
-        MediaPlayer destiny2 = MediaPlayer.create(getContext(), R.raw.destiny2);
-        MediaPlayer destiny3 = MediaPlayer.create(getContext(), R.raw.destiny3);
-        MediaPlayer destiny4 = MediaPlayer.create(getContext(), R.raw.desinty4);
-
-        switch(num) {
+        switch (num) {
+            case 0:
+                view.setImageResource(R.drawable.cattoasting);                  // I GET MY IMAGE RESOURCE
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);                // SET THE IMAGE ON THE PHONE IN THE CENTER VERTICAL, SO THE ORIGIN IS OF COURSE X = 0 , Y = 0
+                toast.setView(view);                                            // YOU SET THE TOAST VIEW WITH THE IMAGE, YOU CAN FIND MORE METHODS IN THE TOAST.JAVA CLASS
+                toast.show();                                                   // DISPLAY THE TOAST
+                break;
             case 1:
-                destiny1.start();
-                view.setImageResource(R.drawable.cattoastin);
+                view.setImageResource(R.drawable.thisisanothercat);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setView(view);
                 toast.show();
                 break;
             case 2:
-                destiny2.start();
                 view.setImageResource(R.drawable.milatoastin);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setView(view);
                 toast.show();
                 break;
             case 3:
-                destiny3.start();
                 view.setImageResource(R.drawable.wesnietoastin);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setView(view);
                 toast.show();
                 break;
             case 4:
-                destiny4.start();
                 view.setImageResource(R.drawable.hyuntoastin);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setView(view);
@@ -447,24 +443,26 @@ public class PortraitFragment extends Fragment implements View.OnClickListener{
     }
 
 
-
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {   //ANDROID SAVING SOME STATES (WHEN THE LAYOUT IS CHANGED, IT WILL CALL THE ONSAVEDINSTANCESTATE
         super.onSaveInstanceState(outState);
+
         SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
+
         editor.putString("mResult", mResult.getText().toString());
-        editor.putString("mOperands",mOperands);
-        editor.putBoolean("mClickEqual",mClickEqual);
-        editor.putString("mOperator",mOperator);
-        editor.putString("mFirstOperand",mFirstOperand);
+        editor.putString("mOperands", mOperands);
+        editor.putBoolean("mClickEqual", mClickEqual);
+        editor.putString("mOperator", mOperator);
+        editor.putString("mFirstOperand", mFirstOperand);
 
         Set<String> set = new HashSet<String>();
         set.addAll(mOperandArray);
-        editor.putStringSet("mOperandArray",set);
-        Log.d(TAG, "mFirstOperand"+ mFirstOperand);
+        editor.putStringSet("mOperandArray", set);
         editor.apply();
         editor.commit();
 
     }
+
+
 }

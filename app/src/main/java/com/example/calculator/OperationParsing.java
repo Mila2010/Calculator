@@ -1,7 +1,5 @@
 package com.example.calculator;
 
-import android.util.Log;
-
 import org.mariuszgromada.math.mxparser.Expression;
 
 import java.util.List;
@@ -20,7 +18,6 @@ public class OperationParsing {
 
     public OperationParsing(List<String> input){              // TAKES IN A ARRAY OF NUMBERS + OPERATORS
         expression = new Expression(revertToString(input));
-        Log.d(TAG,revertToString(input));
         setResult(expression.calculate());                    // CALCULATING
     }
 
@@ -41,7 +38,6 @@ public class OperationParsing {
             }else {
             output+=string;}
         }
-        Log.d(TAG, output);
         return output;
     }
 }
